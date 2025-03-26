@@ -1,113 +1,121 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADAMO AUTO-SERVICE BUSINESS - Royaume des véhicules en Côte d'Ivoire</title>
-    <!-- Font Awesome -->
-    @livewireStyles
-  
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<x-app-layout>
+    <!-- Car Detail Page -->
+    <div class="car-detail-container">
+        <!-- Breadcrumbs -->
+        <ul class="breadcrumb">
+            <li><a href="{{ route('dashboard') }}">Accueil</a></li>
+            <li><a href="{{ $car->type === 'vente' ? route('cars.for-sale') : route('cars.for-rent') }}">
+                {{ $car->type === 'vente' ? 'Voitures à vendre' : 'Voitures à louer' }}
+            </a></li>
+            <li>{{ $car->marque }} {{ $car->modele }}</li>
+        </ul>
+        
+        <!-- Car Detail Card -->
+        <div class="car-detail">
+            <!-- Car Image Gallery -->
+            <div class="car-image-container">
+                <!-- Main image slider -->
+                <div class="main-image-slider">
+                    @foreach($car->photos as $index => $photo)
+                        <div class="slider-item {{ $index === 0 ? 'active' : '' }}">
+                            <img src="{{ asset('storage/' . $photo) }}" alt="{{ $car->marque }} {{ $car->modele }} - Photo {{ $index + 1 }}" />
+                        </div>
+                    @endforeach
+                    
+                    <!-- Navigation arrows -->
+                    <div class="slider-nav">
+                        <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
+                        <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    
+                    <!-- Dots navigation -->
+                    <div class="slider-control-dots">
+                        @foreach($car->photos as $index => $photo)
+                            <div class="slider-dot {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}"></div>
+                        @endforeach
+                    </div>
+                </div>
+                
+                <!-- Thumbnails navigation -->
+                <div class="image-thumbnails">
+                    @foreach($car->photos as $index => $photo)
+                        <div class="thumbnail {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
+                            <img src="{{ asset('storage/' . $photo) }}" alt="Miniature {{ $index + 1 }}" />
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            
+            <!-- Car Info -->
+            <div class="car-info-container">
+                <div class="car-header">
+                    <h1 class="car-title">{{ $car->marque }} {{ $car->modele }}</h1>
+                    <div class="car-badge {{ $car->type === 'vente' ? 'for-sale' : 'for-rent' }}">
+                        {{ $car->type === 'vente' ? 'À vendre' : 'À louer' }}
+                    </div>
+                </div>
+                
+                <div class="car-subtitle">
+                    <span class="reference">Référence: #{{ $car->id }}</span>
+                    <span class="status {{ strtolower($car->statut) }}">{{ $car->statut ?? 'Disponible' }}</span>
+                </div>
+                
+                <div class="car-price">
+                    <span class="price">{{ number_format($car->prix, 0, ',', ' ') }} FCFA</span>
+                    @if($car->type === 'location')
+                        <span class="price-label">/ par jour</span>
+                    @endif
+                </div>
+                
+                <!-- Highlight Features -->
+                <div class="car-highlights">
+                    <div class="highlight-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>{{ $car->annee ?? '2023' }}</span>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>{{ number_format($car->kilometrage, 0, ',', ' ') ?? '15 000' }} km</span>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fas fa-gas-pump"></i>
+                        <span>{{ $car->carburant ?? 'Essence' }}</span>
+                    </div>
+                </div>
+                
+                
+                
+                <!-- Car Description -->
+                <div class="car-description">
+                    <h3 class="description-title">Description</h3>
+                    <p>{{ $car->description ?? 'Ce véhicule est en excellent état. Entretien régulier, première main, faible kilométrage. Disponible immédiatement pour un essai. Garantie incluse.' }}</p>
+                </div>
+                
+                <!-- Call to Action Buttons -->
+                <!-- Call to Action Buttons -->
+<div class="car-actions">
+    <!-- Lien d'appel téléphonique -->
+    <a href="tel:+2250707070707" class="btn-action btn-primary">
+        <i class="fas fa-phone"></i>
+        <span>Appeler maintenant</span>
+    </a>
+    
+    <!-- Lien WhatsApp -->
+    <a href="https://wa.me/2250707070707?text=Je%20suis%20intéressé%20par%20le%20véhicule%20{{ $car->marque }}%20{{ $car->modele }}%20(Réf:%20{{ $car->id }})" 
+       class="btn-action btn-whatsapp"
+       target="_blank">
+        <i class="fab fa-whatsapp"></i>
+        <span>WhatsApp</span>
+    </a>
+</div>
+            </div>
+        </div>
+    </div>
+
     <style>
-        :root {
-            --primary-blue: #0056b3;
-            --secondary-blue: #003b7a;
-            --primary-orange: #ff7a00;
-            --secondary-orange: #e66c00;
-            --primary-green: #00a86b;
-            --secondary-green: #008c58;
-            --light-gray: #f8f9fa;
-            --white: #ffffff;
-            --dark-gray: #333333;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--dark-gray);
-            line-height: 1.6;
-            background-color: #f5f7fa;
-        }
-        
-        /* Navigation */
-        .navbar {
-            background-color: var(--white);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 15px 0;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: var(--primary-blue);
-            text-decoration: none;
-        }
-        
-        .logo span {
-            color: var(--primary-orange);
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark-gray);
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--primary-orange);
-        }
-        
-        .nav-links .contact-btn {
-            background-color: var(--primary-green);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            transition: background-color 0.3s;
-        }
-        
-        .nav-links .contact-btn:hover {
-            background-color: var(--secondary-green);
-            color: white;
-        }
-        
-        /* Car Detail Page Specific Styles */
+        /* Car Detail Page Styles */
         .car-detail-container {
-            padding-top: 100px; /* Space for fixed navbar */
-            padding-bottom: 60px;
+            padding: 100px 0 60px;
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
@@ -116,8 +124,9 @@
         .breadcrumb {
             display: flex;
             list-style: none;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
+            font-size: 0.9rem;
         }
         
         .breadcrumb li {
@@ -139,6 +148,7 @@
         
         .breadcrumb a:hover {
             color: var(--primary-orange);
+            text-decoration: underline;
         }
         
         .breadcrumb li:last-child {
@@ -152,23 +162,23 @@
             background: white;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 30px;
+            margin-bottom: 50px;
         }
         
-        /* Styles pour la galerie d'images */
+        /* Image Gallery Styles */
         .car-image-container {
             position: relative;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            height: auto;
         }
         
         .main-image-slider {
             position: relative;
-            height: 350px;
-            border-radius: 15px;
+            height: 400px;
+            border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
@@ -196,7 +206,7 @@
             display: flex;
             gap: 10px;
             overflow-x: auto;
-            padding: 5px 0;
+            padding: 10px 0;
             scrollbar-width: thin;
             scrollbar-color: var(--primary-orange) #e1e1e1;
         }
@@ -270,16 +280,13 @@
             transition: all 0.3s ease;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
             pointer-events: auto;
+            color: var(--dark-gray);
         }
         
         .slider-nav button:hover {
             background-color: var(--primary-orange);
             color: white;
             transform: scale(1.1);
-        }
-        
-        .slider-nav button:focus {
-            outline: none;
         }
         
         .slider-control-dots {
@@ -307,58 +314,167 @@
             transform: scale(1.2);
         }
         
+        /* Car Info Styles */
         .car-info-container {
             display: flex;
             flex-direction: column;
         }
         
-        .car-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.2rem;
-            color: var(--primary-blue);
+        .car-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 10px;
         }
         
+        .car-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+        
+        .car-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .car-badge.for-sale {
+            background-color: rgba(0, 168, 107, 0.1);
+            color: var(--primary-green);
+        }
+        
+        .car-badge.for-rent {
+            background-color: rgba(0, 86, 179, 0.1);
+            color: var(--primary-blue);
+        }
+        
         .car-subtitle {
-            font-size: 1.1rem;
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
             color: #666;
             margin-bottom: 20px;
         }
         
-        .car-price {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--primary-green);
-            margin-bottom: 25px;
-            background-color: rgba(0, 168, 107, 0.1);
-            padding: 8px 15px;
-            border-radius: 8px;
-            display: inline-block;
-        }
-        
-        .car-specs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
+        .car-subtitle .reference {
             background-color: var(--light-gray);
-            padding: 20px;
+            padding: 4px 10px;
             border-radius: 12px;
         }
         
-        .car-spec-item {
+        .car-subtitle .status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .car-subtitle .status.disponible {
+            background-color: rgba(0, 168, 107, 0.1);
+            color: var(--primary-green);
+        }
+        
+        .car-subtitle .status.vendu, 
+        .car-subtitle .status.loué {
+            background-color: rgba(255, 0, 0, 0.1);
+            color: #ff0000;
+        }
+        
+        .car-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 25px;
+        }
+        
+        .car-price .price-label {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 400;
+        }
+        
+        .car-highlights {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .highlight-item {
             display: flex;
             align-items: center;
+            gap: 8px;
+            background-color: var(--light-gray);
+            padding: 8px 15px;
+            border-radius: 8px;
         }
         
-        .car-spec-item i {
+        .highlight-item i {
             color: var(--primary-orange);
-            margin-right: 12px;
-            font-size: 1.2rem;
-            width: 24px;
-            text-align: center;
         }
         
+        /* Specifications */
+        .car-specs {
+            margin-bottom: 30px;
+        }
+        
+        .specs-title {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .spec-item:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .spec-item i {
+            color: var(--primary-orange);
+            font-size: 1.2rem;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 122, 0, 0.1);
+            border-radius: 50%;
+        }
+        
+        .spec-label {
+            display: block;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .spec-value {
+            display: block;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+        
+        /* Description */
         .car-description {
             margin-bottom: 30px;
             line-height: 1.8;
@@ -370,26 +486,69 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
         
-        .car-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: auto;
+        .description-title {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
         }
-        
-        .btn-action {
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-        
+       /* Styles pour les boutons d'action */
+.car-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: auto;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    text-align: center;
+    flex: 1;
+    min-width: 160px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background-color: var(--primary-orange);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-orange);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-whatsapp {
+    background-color: #25D366;
+    color: white;
+}
+
+.btn-whatsapp:hover {
+    background-color: #128C7E;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive pour petits écrans */
+@media (max-width: 576px) {
+    .car-actions {
+        flex-direction: column;
+    }
+    
+    .btn-action {
+        width: 100%;
+    }
+}
         .btn-primary {
             background-color: var(--primary-orange);
             color: white;
-            flex: 1;
         }
         
         .btn-primary:hover {
@@ -401,7 +560,6 @@
         .btn-secondary {
             background-color: var(--primary-blue);
             color: white;
-            flex: 1;
         }
         
         .btn-secondary:hover {
@@ -409,6 +567,8 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
+        
+       
         
         /* Responsive Design */
         @media (max-width: 1024px) {
@@ -423,11 +583,11 @@
         }
         
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .car-detail-container {
+                padding-top: 80px;
             }
             
-            .car-specs {
+            .specs-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -442,12 +602,20 @@
             .car-price {
                 font-size: 1.5rem;
             }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
         }
         
         @media (max-width: 576px) {
             .car-detail-container {
                 width: 95%;
-                padding-top: 80px;
+                padding-top: 70px;
             }
             
             .car-detail {
@@ -464,14 +632,24 @@
             
             .breadcrumb {
                 margin-bottom: 15px;
+                font-size: 0.8rem;
             }
             
             .car-title {
                 font-size: 1.5rem;
             }
+            
+            .car-highlights {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .contact-form-section {
+                padding: 25px;
+            }
         }
         
-        /* Animation pour le chargement des images */
+        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -481,116 +659,6 @@
             animation: fadeIn 0.5s ease;
         }
     </style>
-</head>
-
-<body>
-    @livewireScripts
-
-    <!-- Navigation (left as is) -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="/" class="logo">ADAMO <span>AUTO</span></a>
-            <ul class="nav-links">
-                <li><a href="/">Accueil</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#cars">Véhicules</a></li>
-                <li><a href="#contact" class="contact-btn">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Car Detail Page -->
-    <div class="car-detail-container">
-        <!-- Breadcrumbs -->
-        <ul class="breadcrumb">
-            <li><a href="/">Accueil</a></li>
-            <li><a href="#">{{ $car->type === 'vente' ? 'Voitures à vendre' : 'Voitures à louer' }}</a></li>
-            <li>{{ $car->marque }} {{ $car->modele }}</li>
-        </ul>
-        
-        <!-- Car Detail Card -->
-        <div class="car-detail">
-            <!-- Car Image Gallery -->
-            <div class="car-image-container">
-                <!-- Main image slider -->
-                <div class="main-image-slider">
-                    @foreach($car->photos as $index => $photo)
-                        <div class="slider-item {{ $index === 0 ? 'active' : '' }}">
-                            <img src="{{ asset('storage/' . $photo) }}" alt="{{ $car->marque }} {{ $car->modele }} - Photo {{ $index + 1 }}" />
-                        </div>
-                    @endforeach
-                    
-                    <!-- Navigation arrows -->
-                    <div class="slider-nav">
-                        <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
-                        <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    
-                    <!-- Dots navigation -->
-                    <div class="slider-control-dots">
-                        @foreach($car->photos as $index => $photo)
-                            <div class="slider-dot {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}"></div>
-                        @endforeach
-                    </div>
-                </div>
-                
-                <!-- Thumbnails navigation -->
-                <div class="image-thumbnails">
-                    @foreach($car->photos as $index => $photo)
-                        <div class="thumbnail {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
-                            <img src="{{ asset('storage/' . $photo) }}" alt="Miniature {{ $index + 1 }}" />
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            
-            <!-- Car Info -->
-            <div class="car-info-container">
-                <h1 class="car-title">{{ $car->marque }} {{ $car->modele }}</h1>
-                <div class="car-subtitle">{{ $car->type === 'vente' ? 'Voiture à vendre' : 'Voiture à louer' }} - Référence: #{{ $car->id }}</div>
-                <div class="car-price">{{ number_format($car->prix, 0, ',', ' ') }} FCFA</div>
-                
-                <!-- Car Specifications -->
-                <div class="car-specs">
-                    <div class="car-spec-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Année: {{ $car->annee ?? '2023' }}</span>
-                    </div>
-                    <div class="car-spec-item">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Kilométrage: {{ number_format($car->kilometrage, 0, ',', ' ') ?? '15 000' }} km</span>
-                    </div>
-                    <div class="car-spec-item">
-                        <i class="fas fa-gas-pump"></i>
-                        <span>Carburant: {{ $car->carburant ?? 'Essence' }}</span>
-                    </div>
-                    <div class="car-spec-item">
-                        <i class="fas fa-cogs"></i>
-                        <span>Transmission: {{ $car->transmission ?? 'Automatique' }}</span>
-                    </div>
-                    <div class="car-spec-item">
-                        <i class="fas fa-car"></i>
-                        <span>État: {{ $car->statut ?? 'Disponible' }}</span>
-                    </div>
-                    <div class="car-spec-item">
-                        <i class="fas fa-palette"></i>
-                        <span>Couleur: {{ $car->couleur ?? 'Non spécifiée' }}</span>
-                    </div>
-                </div>
-                
-                <!-- Car Description -->
-                <div class="car-description">
-                    <p>{{ $car->description ?? 'Ce véhicule est en excellent état. Entretien régulier, première main, faible kilométrage. Disponible immédiatement pour un essai. Garantie incluse.' }}</p>
-                </div>
-                
-                <!-- Call to Action Buttons -->
-                <div class="car-actions">
-                    <a href="#" class="btn-action btn-primary">{{ $car->type === 'vente' ? 'Acheter maintenant' : 'Réserver maintenant' }}</a>
-                    <a href="#contact" class="btn-action btn-secondary">Contacter le vendeur</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -703,35 +771,56 @@
             
             // Arrêter le diaporama au survol
             const mainSlider = document.querySelector('.main-image-slider');
-            mainSlider.addEventListener('mouseenter', stopSlideshow);
-            mainSlider.addEventListener('mouseleave', startSlideshow);
+            if (mainSlider) {
+                mainSlider.addEventListener('mouseenter', stopSlideshow);
+                mainSlider.addEventListener('mouseleave', startSlideshow);
+            }
             
             // Démarrer le diaporama
             startSlideshow();
             
             // Swipe pour appareils mobiles
-            let touchStartX = 0;
-            let touchEndX = 0;
-            
-            mainSlider.addEventListener('touchstart', function(e) {
-                touchStartX = e.changedTouches[0].screenX;
-            }, false);
-            
-            mainSlider.addEventListener('touchend', function(e) {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, false);
-            
-            function handleSwipe() {
-                if (touchEndX < touchStartX - 50) {
-                    // Swipe gauche
-                    nextBtn.click();
-                } else if (touchEndX > touchStartX + 50) {
-                    // Swipe droite
-                    prevBtn.click();
+            if (mainSlider) {
+                let touchStartX = 0;
+                let touchEndX = 0;
+                
+                mainSlider.addEventListener('touchstart', function(e) {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, false);
+                
+                mainSlider.addEventListener('touchend', function(e) {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                }, false);
+                
+                function handleSwipe() {
+                    if (touchEndX < touchStartX - 50) {
+                        // Swipe gauche
+                        nextBtn.click();
+                    } else if (touchEndX > touchStartX + 50) {
+                        // Swipe droite
+                        prevBtn.click();
+                    }
                 }
             }
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
         });
     </script>
-</body>
-</html>
+</x-app-layout>

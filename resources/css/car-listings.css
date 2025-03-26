@@ -1,0 +1,212 @@
+/* Global Styling for Car Listings */
+:root {
+    --primary-blue: #3498db;
+    --primary-green: #2ecc71;
+    --text-dark: #2c3e50;
+    --text-light: #7f8c8d;
+    --background-light: #f4f7f6;
+    --transition-speed: 0.3s;
+}
+
+body {
+    background-color: var(--background-light);
+    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Car Card Styling */
+.car-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: 
+        transform var(--transition-speed) ease,
+        box-shadow var(--transition-speed) ease;
+}
+
+.car-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.car-card__image {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.car-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-speed) ease;
+}
+
+.car-card:hover .car-card__image img {
+    transform: scale(1.05);
+}
+
+.car-card__badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.car-card__badge--rent {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.car-card__badge--sale {
+    background-color: var(--primary-green);
+    color: white;
+}
+
+.car-card__content {
+    padding: 20px;
+}
+
+.car-card__title {
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.car-card__price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.car-card__price--rent {
+    color: var(--primary-blue);
+}
+
+.car-card__price--sale {
+    color: var(--primary-green);
+}
+
+.car-card__details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.car-card__year {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.car-card__btn {
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: 
+        background-color var(--transition-speed) ease,
+        transform var(--transition-speed) ease;
+}
+
+.car-card__btn--rent {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.car-card__btn--sale {
+    background-color: var(--primary-green);
+    color: white;
+}
+
+.car-card__btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* No Cars Available */
+.no-cars-message {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.no-cars-message h3 {
+    color: var(--text-dark);
+    font-size: 1.2rem;
+}
+
+/* Responsive Grid */
+.car-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 1200px) {
+    .car-grid {
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .car-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .car-card__image {
+        height: 180px;
+    }
+
+    .car-card__title {
+        font-size: 1rem;
+    }
+
+    .car-card__price {
+        font-size: 1.1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .car-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .car-card__image {
+        height: 250px;
+    }
+}
+
+/* Placeholder Image Styling */
+.car-placeholder {
+    background-color: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.car-placeholder svg {
+    color: #6c757d;
+    width: 64px;
+    height: 64px;
+}
