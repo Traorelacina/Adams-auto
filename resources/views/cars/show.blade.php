@@ -1,14 +1,7 @@
 <x-app-layout>
     <!-- Car Detail Page -->
     <div class="car-detail-container">
-        <!-- Breadcrumbs -->
-        <ul class="breadcrumb">
-            <li><a href="{{ route('dashboard') }}">Accueil</a></li>
-            <li><a href="{{ $car->type === 'vente' ? route('cars.for-sale') : route('cars.for-rent') }}">
-                {{ $car->type === 'vente' ? 'Voitures à vendre' : 'Voitures à louer' }}
-            </a></li>
-            <li>{{ $car->marque }} {{ $car->modele }}</li>
-        </ul>
+       
         
         <!-- Car Detail Card -->
         <div class="car-detail">
