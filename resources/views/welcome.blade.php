@@ -3,7 +3,6 @@
     <section class="hero">
         <!-- Background Images Slideshow -->
         <div class="hero-slideshow">
-      
             <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')"></div>
             <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')"></div>
             <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')"></div>
@@ -14,7 +13,7 @@
         
         <div class="hero-content">
             <div class="hero-tagline">Excellence Automobile depuis 2022</div>
-            <h1>ADAMO AUTO-SERVICE BUSINESS</h1>
+            <h1>ADAM'S AUTO-SERVICE BUSINESS</h1>
             <p>Le leader de la vente et location de véhicules en Côte d'Ivoire</p>
             <div class="hero-buttons">
                 <a href="#services" class="btn btn-primary">
@@ -107,7 +106,7 @@
         </div>
     </section>
 
-      <!-- Featured Cars Section -->
+    <!-- Featured Cars Section -->
     <section id="cars" class="featured-cars py-16">
         <div class="container mx-auto px-4">
             <div class="section-title text-center mb-12">
@@ -136,7 +135,7 @@
             </div>
             
             <div class="text-center mt-12">
-                <a href="{{ route('cars.for-sale') }}" class="btn btn-primary inline-flex items-center">
+                <a id="inventory-link" href="{{ route('cars.for-sale') }}" class="btn btn-primary inline-flex items-center">
                     <span>Voir tout notre inventaire</span>
                     <i class="fas fa-chevron-right ml-2"></i>
                 </a>
@@ -254,8 +253,8 @@
                         <i class="fas fa-phone-alt"></i>
                         <div>
                             <h4>Téléphone</h4>
-                            <p>+225 07 07 07 07 07</p>
-                            <p>+225 27 22 22 22 22</p>
+                            <p>+225 05 94 93 07 15</p>
+                         
                         </div>
                     </div>
                     
@@ -334,12 +333,11 @@
         </div>
     </section>
 
-   
-
     <!-- Back to Top Button -->
     <div class="back-to-top">
         <i class="fas fa-arrow-up"></i>
     </div>
+
 
     <style>
         :root {
@@ -1253,12 +1251,13 @@
         }
     </style>
 
-    <script>
+   
+            <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Hero Slideshow
             const slides = document.querySelectorAll('.hero-slideshow .slide');
             let currentSlide = 0;
-            const slideInterval = 5000; // Change image every 5 seconds
+            const slideInterval = 5000;
 
             function nextSlide() {
                 slides[currentSlide].classList.remove('active');
@@ -1266,10 +1265,8 @@
                 slides[currentSlide].classList.add('active');
             }
 
-            // Start slideshow
             let slideTimer = setInterval(nextSlide, slideInterval);
 
-            // Pause on hover
             const hero = document.querySelector('.hero');
             hero.addEventListener('mouseenter', () => {
                 clearInterval(slideTimer);
@@ -1279,13 +1276,12 @@
                 slideTimer = setInterval(nextSlide, slideInterval);
             });
 
-            // Initialize first slide
             slides[0].classList.add('active');
 
             // Animated counter for stats
             const statNumbers = document.querySelectorAll('.stat-number');
-            const animationDuration = 2000; // 2 seconds
-            const frameDuration = 1000 / 60; // 60 frames per second
+            const animationDuration = 2000;
+            const frameDuration = 1000 / 60;
             const totalFrames = Math.round(animationDuration / frameDuration);
             
             statNumbers.forEach(stat => {
@@ -1306,9 +1302,10 @@
                 }, frameDuration);
             });
 
-            // Cars navigation
+            // Cars navigation with dynamic link update
             const navBtns = document.querySelectorAll('.nav-btn');
             const carsGrids = document.querySelectorAll('.cars-grid');
+            const inventoryLink = document.getElementById('inventory-link');
             
             navBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1325,6 +1322,11 @@
                             grid.classList.add('active');
                         }
                     });
+                    
+                    // Update inventory link based on active tab
+                    inventoryLink.href = category === 'rent' 
+                        ? "{{ route('cars.for-rent') }}" 
+                        : "{{ route('cars.for-sale') }}";
                 });
             });
 
@@ -1342,10 +1344,7 @@
                 });
             }
 
-            // Initial check
             checkScroll();
-            
-            // Check on scroll
             window.addEventListener('scroll', checkScroll);
 
             // Back to top button
@@ -1365,19 +1364,9 @@
                     behavior: 'smooth'
                 });
             });
-
-            // Check authentication for protected routes
-            function checkAuth(event, element) {
-                const isAuthenticated = element.getAttribute('data-authenticated') === 'true';
-
-                if (!isAuthenticated) {
-                    event.preventDefault();
-                    alert("Vous devez être connecté pour accéder à cette section.");
-                    window.location.href = "{{ route('login') }}";
-                    return false;
-                }
-                return true;
-            }
         });
     </script>
+
+
+       
 </x-app-layout>

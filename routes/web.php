@@ -11,6 +11,10 @@ Route::get('/voitures-a-vendre', function () {
     return view('cars.for-sale');
 })->name('cars.for-sale');
 
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
 Route::get('/voitures-a-louer', function () {
     return view('cars.for-rent');
 })->name('cars.for-rent');

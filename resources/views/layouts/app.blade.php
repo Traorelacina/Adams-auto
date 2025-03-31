@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -20,6 +19,17 @@
         
         <!-- Custom Styles -->
         <style>
+            :root {
+                --primary-blue: #0056b3;
+                --secondary-blue: #003b7a;
+                --primary-orange: #ff7a00;
+                --secondary-orange: #e66c00;
+                --primary-green: #00a86b;
+                --secondary-green: #008c58;
+                --light-gray: #f8f9fa;
+                --white: #ffffff;
+            }
+
             /* Navigation Styles */
             .navbar {
                 background-color: var(--white);
@@ -45,6 +55,7 @@
                 font-weight: 700;
                 font-size: 1.8rem;
                 color: var(--primary-blue);
+                text-decoration: none;
             }
             
             .logo span {
@@ -53,27 +64,36 @@
             
             .nav-links {
                 display: flex;
+                align-items: center;
                 list-style: none;
+                margin: 0;
+                padding: 0;
             }
             
             .nav-links li {
-                margin-left: 30px;
+                margin-left: 25px;
             }
             
-            .nav-links a {
+            .nav-links a, .nav-links button {
                 text-decoration: none;
                 color: #333;
                 font-weight: 500;
-                transition: color 0.3s;
+                transition: all 0.3s;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-family: inherit;
+                font-size: inherit;
+                padding: 0;
             }
             
-            .nav-links a:hover {
+            .nav-links a:hover, .nav-links button:hover {
                 color: var(--primary-orange);
             }
             
             .nav-links .contact-btn {
                 background-color: var(--primary-green);
-                color: white;
+                color: white !important;
                 padding: 8px 20px;
                 border-radius: 30px;
                 transition: background-color 0.3s;
@@ -81,44 +101,55 @@
             
             .nav-links .contact-btn:hover {
                 background-color: var(--secondary-green);
-                color: white;
+            }
+
+            .logout-btn {
+                display: flex;
+                align-items: center;
+                gap: 5px;
             }
 
             .hamburger {
-    display: none;
-    font-size: 1.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #333;
-}
+                display: none;
+                font-size: 1.5rem;
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: #333;
+            }
 
-@media (max-width: 768px) {
-    .hamburger {
-        display: block;
-    }
+            @media (max-width: 768px) {
+                .hamburger {
+                    display: block;
+                }
 
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        background-color: var(--white);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        text-align: center;
-    }
+                .nav-links {
+                    display: none;
+                    flex-direction: column;
+                    position: absolute;
+                    top: 70px;
+                    left: 0;
+                    right: 0;
+                    background-color: var(--white);
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                    width: 100%;
+                    text-align: center;
+                    padding: 20px 0;
+                }
 
-    .nav-links.active {
-        display: flex;
-    }
+                .nav-links.active {
+                    display: flex;
+                }
 
-    .nav-links li {
-        margin: 15px 0;
-    }
-}
+                .nav-links li {
+                    margin: 12px 0;
+                }
 
+                .nav-links .contact-btn {
+                    display: inline-block;
+                    margin: 5px auto;
+                }
+            }
 
             /* Footer Styles */
             .footer {
@@ -154,6 +185,7 @@
             
             .footer-links {
                 list-style: none;
+                padding: 0;
             }
             
             .footer-links li {
@@ -173,6 +205,7 @@
             .social-links {
                 display: flex;
                 margin-top: 20px;
+                gap: 10px;
             }
             
             .social-links a {
@@ -183,7 +216,6 @@
                 height: 40px;
                 background-color: rgba(255, 255, 255, 0.1);
                 border-radius: 50%;
-                margin-right: 10px;
                 transition: all 0.3s;
             }
             
@@ -192,27 +224,23 @@
                 transform: translateY(-3px);
             }
             
-            .social-links i {
-                color: white;
-                font-size: 1.2rem;
-            }
-            
             .footer-bottom {
                 text-align: center;
                 padding-top: 20px;
                 border-top: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 0.9rem;
             }
 
-            /* Other root variables and styles from the original file */
-            :root {
-                --primary-blue: #0056b3;
-                --secondary-blue: #003b7a;
-                --primary-orange: #ff7a00;
-                --secondary-orange: #e66c00;
-                --primary-green: #00a86b;
-                --secondary-green: #008c58;
-                --light-gray: #f8f9fa;
-                --white: #ffffff;
+            /* Main Content */
+            .min-h-screen {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            main {
+                flex: 1;
+                padding-bottom: 40px;
             }
         </style>
     </head>
@@ -221,26 +249,34 @@
         <div class="min-h-screen bg-gray-100">
             <!-- Navigation -->
             <nav class="navbar">
-    <div class="container nav-container">
-        <a href="{{ route('dashboard') }}" class="logo">ADAMO <span>AUTO</span></a>
-        <button class="hamburger" id="hamburger-menu">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="{{ route('dashboard') }}">Accueil</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#cars">Véhicules</a></li>
-            <li><a href="#contact" class="contact-btn">Contact</a></li>
-            @auth
-                <li><a href="{{ route('profile.edit') }}">Profil</a></li>
-            @else
-                <li><a href="{{ route('login') }}">Connexion</a></li>
-                <li><a href="{{ route('register') }}">Inscription</a></li>
-            @endauth
-        </ul>
-    </div>
-</nav>
-
+                <div class="container nav-container">
+                    <a href="{{ route('dashboard') }}" class="logo">ADAM'S <span>AUTO</span></a>
+                    <button class="hamburger" id="hamburger-menu" aria-label="Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="\">Accueil</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#cars">Véhicules</a></li>
+                        <li><a href="#contact" class="contact-btn">Contact</a></li>
+                        <li><a href="about" class="contact-btn">À propos</a></li>
+                        @auth
+                            <li><a href="{{ route('profile.edit') }}">Profil</a></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="logout-btn">
+                                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                                    </button>
+                                </form>
+                            </li>
+                        @else
+                            <li><a href="{{ route('login') }}">Connexion</a></li>
+                            <li><a href="{{ route('register') }}">Inscription</a></li>
+                        @endauth
+                    </ul>
+                </div>
+            </nav>
 
             <!-- Page Content -->
             <main class="mt-[70px]">
@@ -255,10 +291,10 @@
                             <h3>À propos</h3>
                             <p>ADAMO AUTO-SERVICE BUSINESS est le leader de la vente et de la location de véhicules en Côte d'Ivoire depuis 2010.</p>
                             <div class="social-links">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                             </div>
                         </div>
                         <div class="footer-column">
@@ -288,47 +324,55 @@
         </div>
 
         <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const animatedElements = document.querySelectorAll('.animated-fade');
-            
-            function checkScroll() {
-                animatedElements.forEach(element => {
-                    const elementTop = element.getBoundingClientRect().top;
-                    const elementVisible = 150;
-                    
-                    if (elementTop < window.innerHeight - elementVisible) {
-                        element.classList.add('visible');
-                    }
+            document.addEventListener('DOMContentLoaded', function() {
+                // Animation au scroll
+                const animatedElements = document.querySelectorAll('.animated-fade');
+                
+                function checkScroll() {
+                    animatedElements.forEach(element => {
+                        const elementTop = element.getBoundingClientRect().top;
+                        const elementVisible = 150;
+                        
+                        if (elementTop < window.innerHeight - elementVisible) {
+                            element.classList.add('visible');
+                        }
+                    });
+                }
+
+                checkScroll();
+                window.addEventListener('scroll', checkScroll);
+
+                // Menu mobile
+                const hamburger = document.getElementById('hamburger-menu');
+                const navLinks = document.getElementById('nav-links');
+
+                if (hamburger && navLinks) {
+                    hamburger.addEventListener('click', () => {
+                        navLinks.classList.toggle('active');
+                        hamburger.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+                    });
+                }
+
+                // Fermer le menu mobile quand on clique sur un lien
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth <= 768) {
+                            navLinks.classList.remove('active');
+                            hamburger.setAttribute('aria-expanded', 'false');
+                        }
+                    });
                 });
+            });
+
+            function checkAuth(event, element) {
+                const isAuthenticated = element.getAttribute('data-authenticated') === 'true';
+
+                if (!isAuthenticated) {
+                    event.preventDefault();
+                    alert("Vous devez être connecté pour accéder à cette section.");
+                    window.location.href = "{{ route('login') }}";
+                }
             }
-
-            // Initial check
-            checkScroll();
-            
-            // Check on scroll
-            window.addEventListener('scroll', checkScroll);
-        });
-
-        function checkAuth(event, element) {
-            const isAuthenticated = element.getAttribute('data-authenticated') === 'true';
-
-            if (!isAuthenticated) {
-                event.preventDefault();
-                alert("Vous devez être connecté pour accéder à cette section.");
-                window.location.href = "{{ route('login') }}";
-            }
-        }
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-    const hamburger = document.getElementById('hamburger-menu');
-    const navLinks = document.getElementById('nav-links');
-
-    hamburger.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-    });
-});
-
         </script>
     </body>
 </html>
