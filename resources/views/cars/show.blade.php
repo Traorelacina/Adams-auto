@@ -88,13 +88,13 @@
                 <!-- Call to Action Buttons -->
 <div class="car-actions">
     <!-- Lien d'appel téléphonique -->
-    <a href="tel:+2250707070707" class="btn-action btn-primary">
+    <a href="tel:+2250594930715" class="btn-action btn-primary">
         <i class="fas fa-phone"></i>
         <span>Appeler maintenant</span>
     </a>
     
     <!-- Lien WhatsApp -->
-    <a href="https://wa.me/2250707070707?text=Je%20suis%20intéressé%20par%20le%20véhicule%20{{ $car->marque }}%20{{ $car->modele }}%20(Réf:%20{{ $car->id }})" 
+    <a href="https://wa.me/22505949307 15?text=Je%20suis%20intéressé%20par%20le%20véhicule%20{{ $car->marque }}%20{{ $car->modele }}%20(Réf:%20{{ $car->id }})" 
        class="btn-action btn-whatsapp"
        target="_blank">
         <i class="fab fa-whatsapp"></i>

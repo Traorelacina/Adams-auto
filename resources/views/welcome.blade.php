@@ -12,7 +12,7 @@
         <div class="hero-overlay"></div>
         
         <div class="hero-content">
-            <div class="hero-tagline">Excellence Automobile depuis 2022</div>
+            <div class="hero-tagline">Excellence Automobile depuis 2020</div>
             <h1>ADAM'S AUTO-SERVICE BUSINESS</h1>
             <p>Le leader de la vente et location de véhicules en Côte d'Ivoire</p>
             <div class="hero-buttons">
@@ -135,7 +135,7 @@
             </div>
             
             <div class="text-center mt-12">
-                <a id="inventory-link" href="{{ route('cars.for-sale') }}" class="btn btn-primary inline-flex items-center">
+                <a id="inventory-link" href="{{ route('login') }}" class="btn btn-primary inline-flex items-center">
                     <span>Voir tout notre inventaire</span>
                     <i class="fas fa-chevron-right ml-2"></i>
                 </a>
@@ -289,48 +289,70 @@
                 </div>
                 
                 <div class="contact-form">
-                    <h3>Envoyez-nous un message</h3>
-                    <form action="#" method="POST">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="nom" class="form-label">Nom complet *</label>
-                                <input type="text" id="nom" name="nom" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="form-label">Email *</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="telephone" class="form-label">Téléphone *</label>
-                                <input type="tel" id="telephone" name="telephone" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="sujet" class="form-label">Sujet</label>
-                                <select id="sujet" name="sujet" class="form-control">
-                                    <option value="vente">Demande d'achat</option>
-                                    <option value="location">Demande de location</option>
-                                    <option value="entretien">Demande d'entretien</option>
-                                    <option value="autre">Autre demande</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message" class="form-label">Message *</label>
-                            <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn-submit">
-                            <span>Envoyer le message</span>
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
+    <h3>Envoyez-nous un message</h3>
+    
+    @if(session('success'))
+        <div class="alert alert-success mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <form action="{{ route('contact.store') }}" method="POST">
+        @csrf <!-- Protection CSRF obligatoire -->
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="nom" class="form-label">Nom complet *</label>
+                <input type="text" id="nom" name="nom" class="form-control" 
+                       value="{{ old('nom') }}" required>
+                @error('nom')
+                    <span class="text-danger text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" id="email" name="email" class="form-control" 
+                       value="{{ old('email') }}" required>
+                @error('email')
+                    <span class="text-danger text-sm">{{ $message }}</span>
+                @enderror
             </div>
         </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="telephone" class="form-label">Téléphone *</label>
+                <input type="tel" id="telephone" name="telephone" class="form-control" 
+                       value="{{ old('telephone') }}" required>
+                @error('telephone')
+                    <span class="text-danger text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label for="sujet" class="form-label">Sujet</label>
+                <select id="sujet" name="sujet" class="form-control">
+                    <option value="vente" {{ old('sujet') == 'vente' ? 'selected' : '' }}>Demande d'achat</option>
+                    <option value="location" {{ old('sujet') == 'location' ? 'selected' : '' }}>Demande de location</option>
+                    <option value="entretien" {{ old('sujet') == 'entretien' ? 'selected' : '' }}>Demande d'entretien</option>
+                    <option value="autre" {{ old('sujet') == 'autre' ? 'selected' : '' }}>Autre demande</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="message" class="form-label">Message *</label>
+            <textarea id="message" name="message" class="form-control" rows="5" required>{{ old('message') }}</textarea>
+            @error('message')
+                <span class="text-danger text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+        
+        <button type="submit" class="btn-submit">
+            <span>Envoyer le message</span>
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </form>
+</div>
     </section>
 
     <!-- Back to Top Button -->
@@ -1325,8 +1347,8 @@
                     
                     // Update inventory link based on active tab
                     inventoryLink.href = category === 'rent' 
-                        ? "{{ route('cars.for-rent') }}" 
-                        : "{{ route('cars.for-sale') }}";
+                        ? "{{ route('login') }}" 
+                        : "{{ route('login') }}";
                 });
             });
 

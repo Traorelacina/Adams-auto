@@ -17,7 +17,8 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Filament\Widgets\MonthlyViewsChart; // <-- Ajout de l'import
+use App\Filament\Widgets\MonthlyViewsChart;
+use App\Filament\Widgets\UsersListWidget;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -40,7 +41,8 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
-                MonthlyViewsChart::class, // <-- Ajout du widget ici
+                MonthlyViewsChart::class,
+                UsersListWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -55,6 +57,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                \App\Http\Middleware\IsAdmin::class, // ✅ Vérifie si l'utilisateur est admin
             ]);
     }
 }
